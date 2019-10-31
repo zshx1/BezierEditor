@@ -33,6 +33,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        cc.debug.setDisplayStats(false);
         //添加鼠标按下监听
         let frame = {};
         try {
