@@ -2,7 +2,7 @@
  cocos create版贝塞尔曲线编辑器，JavaScript，可用于制作捕鱼鱼阵
 ```
 +-- assets 资产目录
-|   +--  资源目录
+|   +-- resources 资源目录
 |   |   +-- animation 动画目录
 |   |   |   +-- fish.anim 鱼运动动画
 |   |   +-- img 图片资源
