@@ -1,30 +1,24 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
+/**
+ * 绘制区域
+ * 鼠标右键点击该区域生成控制点；鼠标左键按住控制点，可调整控制位置
+ */
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        point: {
+        point: { // 曲线控制点预制体
             type: cc.Prefab,
             default: null
         },
-        frameNum: {
+        frameNum: { // 曲线帧数
             type: cc.EditBox,
             default: null
         },
-        exportWidth: {
+        exportWidth: { // 导出曲线画板宽度
             type: cc.EditBox,
             default: null
         },
-        exportHeight: {
+        exportHeight: { // 导出曲线画板高度
             type: cc.EditBox,
             default: null
         }
@@ -33,9 +27,10 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        // 隐藏cocos create的状态信息
         cc.debug.setDisplayStats(false);
-        //添加鼠标按下监听
         let frame = {};
+        // 获取编辑器绘制信息
         try {
             frame.num = parseInt(this.frameNum.string);
             frame.width = parseInt(this.exportWidth.string);
@@ -43,22 +38,34 @@ cc.Class({
         } catch(e) {
             this.frameNum.string = '';
         }
+        // 添加鼠标按下监听
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this._mouseDown, this);
+        // 引入贝塞尔曲线编辑器
         this.bezier = require('Bezier');
+        // 初始化曲线编辑器
         this.bezier.init(this.node, frame);
+        // 绘制曲线背景
         this.bezier.drawBackground();
+        // 引入贝塞尔曲线管理器
         this.bezierManager = require('BezierManager');
     },
 
+    /**
+     * 鼠标按下事件处理
+     * @param {*} mouseDown 事件对象
+     */
     _mouseDown(mouseDown) {
-        let item = this.bezierManager.getCheckedItem();
+        let item = this.bezierManager.getCheckedItem(); // 获取曲线选中对象
         if (item) {
             // 判断鼠标按键类型； 0:左键；1：滚动键；2：右键；
             if (mouseDown._button > 0) {
+                // 获取点击坐标
                 let location = mouseDown.getLocation();
+                // 添加控制点
                 this.addPoint(location);
             }
         } else {
+            // 引入工具箱
             let tools = require('Tools'),
                 mes = '';
             if (this.bezierManager.getLength()) {
@@ -70,17 +77,27 @@ cc.Class({
         }
     },
 
+    /**
+     * 添加曲线控制点，并绘制路径
+     * @param {*} location 控制点坐标信息
+     */
     addPoint(location) {
+        // 实例化控制点预制体
         let _point = cc.instantiate(this.point);
         // 设置节点位置，注意要使用父节点进行对触摸点进行坐标转换
         _point.position = this.node.convertToNodeSpaceAR(location);
+        // 设置控制点的父节点
         _point.parent = this.node;
+        // 设置控制点的下表
         _point.getComponent('Point').index = this.bezier.pointList.length;
+        // 计算控制点的全局坐标
         let worldPosition = this.node.parent.convertToNodeSpaceAR(location);
-        this.bezier.pointList.push({
+        // 把控制点的全局坐标添加到曲线编辑器中
+        this.bezier.addPoint({
             x: worldPosition.x,
             y: worldPosition.y
         });
+        // 绘制贝塞尔曲线
         this.bezier.repaint();
     }
 

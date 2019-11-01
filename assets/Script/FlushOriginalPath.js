@@ -1,13 +1,6 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
+/**
+ * 重新加载原始曲线
+ */
 cc.Class({
     extends: cc.Component,
 
@@ -38,6 +31,7 @@ cc.Class({
 
     flush() {
         window.location.reload();
+        // 在回调事件中不能进行异步操作所以没有采用以下方法
         // this.itemList.content.removeAllChildren();
         // this.bezierManager.clearAll();
         // this.bezier.drawBackground();
@@ -50,7 +44,7 @@ cc.Class({
             if (err)
                 return;
             for(let i = 0; i < res.length; i++) {
-                that.addBezier(res[i].json, res[i].name)
+                that.addBezier(res[i].json, res[i].name);
             }
         })
     },

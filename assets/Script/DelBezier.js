@@ -1,18 +1,12 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
+/**
+ * 删除原始曲线按钮
+ * 在原始曲线列表中删除原始曲线
+ */
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        itemList: {
+        itemList: { // 原始曲线列表
             type: cc.ScrollView,
             default: null
         }
@@ -21,8 +15,11 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        // 监听鼠标按下事件
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this._mouseDown, this);
+        // 引入贝塞尔曲线管理器
         this.bezierManager = require('BezierManager');
+        // 引入工具箱
         this.tools = require('Tools');
     },
 
@@ -36,7 +33,7 @@ cc.Class({
                 break;
             }
         }
-        console.log(item)
+
         if (item && item.type !== 'old') {
             _content.removeChild(_content.getChildByUuid(item.id));
             this.bezierManager.delBezier(item.index);
