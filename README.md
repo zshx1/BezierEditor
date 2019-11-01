@@ -1,6 +1,6 @@
 # BezierEditor
  cocos create版贝塞尔曲线编辑器，JavaScript，可用于制作捕鱼鱼阵
-[toc]
+```
 +-- assets 资产目录
 |   +--  资源目录
 |   |   +-- animation 动画目录
@@ -23,6 +23,7 @@
 |   |   +-- Input.js 文本输入控制
 |   |   +-- Point.js 控制点
 |   |   +-- Tools.js 工具箱
+```
 
 # 工具使用说明：
 1. 需要先新增曲线，并选中曲线
