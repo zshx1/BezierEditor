@@ -1,6 +1,6 @@
 # BezierEditor
  cocos create版贝塞尔曲线编辑器，JavaScript，可用于制作捕鱼鱼阵
-.
+[toc]
 +-- assets 资产目录
 |   +--  资源目录
 |   |   +-- animation 动画目录
