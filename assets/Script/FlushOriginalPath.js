@@ -14,7 +14,7 @@ cc.Class({
             default: null
         },
         toggleGroup: {
-            type: cc.ToggleGroup,
+            type: cc.ToggleContainer,
             default: null
         },
         flushing: false
@@ -52,13 +52,12 @@ cc.Class({
     addBezier(_data, name) {
         let item = cc.instantiate(this.item),
             _index = this.bezierManager.getLength(),
-            _toggle = item.getChildByName('bezierCheck').getComponent(cc.Toggle);
-        item.getChildByName('bezierCheck').on('toggle', this._toggle, this);
+            _toggle = item.getComponent(cc.Toggle);
+        item.on('toggle', this._toggle, this);
         // 动态设置曲线选中状态
         _toggle.isChecked = false;
-        _toggle.toggleGroup = this.toggleGroup;
         // 动态设置曲线名称
-        item.getChildByName('bezierName').getComponent(cc.Label).string = name || ('bezier' + _index);
+        item.getChildByName('Label').getComponent(cc.Label).string = name || ('bezier' + _index);
         this.itemList.content.addChild(item);
         this.bezierManager.addBezier({
             status: _toggle.isChecked,

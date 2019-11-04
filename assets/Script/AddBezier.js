@@ -16,7 +16,7 @@ cc.Class({
             default: null
         },
         toggleGroup: { // 多选组
-            type: cc.ToggleGroup,
+            type: cc.ToggleContainer,
             default: null
         },
         point: { // 曲线控制点预制体
@@ -62,18 +62,16 @@ cc.Class({
     addBezier(_data, name, _type) {
         let item = cc.instantiate(this.item), // 实例化曲线预制体
             _index = this.bezierManager.getLength(), // 新增曲线下标
-            _toggle = item.getChildByName('bezierCheck').getComponent(cc.Toggle); // 获取曲线的复选框
-        item.getChildByName('bezierCheck').on('toggle', this._toggle, this); // 给曲线复选框添加选择事件
+            _toggle = item.getComponent(cc.Toggle); // 获取曲线的复选框
+        item.on('toggle', this._toggle, this); // 给曲线复选框添加选择事件
         _toggle.isChecked = false; // 默认不选中该条曲线
-        _toggle.toggleGroup = this.toggleGroup; // 设置曲线复选框属于一个组，让曲线列表中的数据同时只能选中一条数据
-        item.getChildByName('bezierName').getComponent(cc.Label).string = name || ('bezier' + _index); // 动态设置原始曲线名称
+        item.getChildByName('Label').getComponent(cc.Label).string = name || ('bezier' + _index); // 动态设置原始曲线名称
         this.itemList.content.addChild(item); // 把原始曲线预制体添加到滚动列表中
-        console.log(item.uuid)
         this.bezierManager.addBezier({ // 把原始曲线的信息存放在原始曲线管理器中
             status: _toggle.isChecked,
             index: _index,
             id: item.uuid,
-            data: _data,
+            data: _data || [],
             type: _type || ''
         })
     },
@@ -86,14 +84,13 @@ cc.Class({
         const that = this;
         if (event.isChecked) { // 判断原始曲线选择状态
             that.drawArea.removeAllChildren(); // 清空曲线绘制区域的控制点
-            const path = that.bezierManager.changeItem(event.node.parent.uuid, event.isChecked); // 在原始曲线管理器中改变选中的曲线信息，并返回曲线的路径信息
+            that.bezier.clearPoint(); // 清空曲线编辑器的控制点信息
+            that.bezier.drawBackground(); // 清空绘制区域的图像
+            const path = that.bezierManager.changeItem(event.node._id, event.isChecked); // 在原始曲线管理器中改变选中的曲线信息，并返回曲线的路径信息
             if (path) { // 判断路径信息
-                that.bezier.clearPoint(); // 清空曲线编辑器的控制点信息
                 for(let i = 0; i < path.length; i++) {
                     that.drawOriginalPath(path[i]) // 绘制曲线控制点
                 }
-            } else {
-                that.bezier.drawBackground(); // 清空绘制区域的图像
             }
         } else {
             that.drawArea.removeAllChildren(); // 清空曲线绘制区域的控制点

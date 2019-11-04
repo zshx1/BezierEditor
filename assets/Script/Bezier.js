@@ -10,6 +10,8 @@ module.exports = {
   // 清空曲线控制点
   clearPoint() {
     this.pointList = [];
+    this.movePoints = [];
+    this.targetPoints = [];
   },
 
   /**

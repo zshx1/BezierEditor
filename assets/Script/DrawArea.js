@@ -92,6 +92,13 @@ cc.Class({
         _point.getComponent('Point').index = this.bezier.pointList.length;
         // 计算控制点的全局坐标
         let worldPosition = this.node.parent.convertToNodeSpaceAR(location);
+        // 获取选中曲线
+        let bezier = this.bezierManager.getCheckedItem();
+        // 添加选中曲线数据
+        bezier.data.push({
+            x: worldPosition.x,
+            y: worldPosition.y
+        });
         // 把控制点的全局坐标添加到曲线编辑器中
         this.bezier.addPoint({
             x: worldPosition.x,

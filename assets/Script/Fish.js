@@ -14,7 +14,7 @@ cc.Class({
     onLoad () {
         let that = this;
         // 加载贝塞尔曲线编辑器生成的曲线
-        cc.loader.loadRes('json/bezier', function(err,res){
+        cc.loader.loadRes('json/988dcac2-4342-47c7-9df1-da633d749684', function(err,res){
             if (err)
                 return;
             if (res.json) {
